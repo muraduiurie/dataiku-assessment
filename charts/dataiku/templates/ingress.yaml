@@ -21,7 +21,7 @@ spec:
             pathType: {{ .Values.ingress.pathType }}
             backend:
               service:
-                name: {{ include "dataiku.name" . }}-front
+                name: {{ include "dataiku.name" . }}-frontend
                 port:
                   number: {{ .Values.frontend.service.port }}
           - path: {{ .Values.ingress.api.path }}

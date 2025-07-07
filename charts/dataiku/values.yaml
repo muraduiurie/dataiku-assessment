@@ -2,37 +2,25 @@ frontend:
   replicas: 2
   image:
     repository: muraduiurie/dataiku-front
-    tag: latest
+    tag: 705380c
     pullPolicy: IfNotPresent
   containerPort: 80
   env: {}
   service:
     port: 80
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests:
-      cpu: 250m
-      memory: 256Mi
+  resources: {}
 
 api:
   replicas: 2
   image:
     repository: muraduiurie/dataiku-api
-    tag: latest
+    tag: 705380c
     pullPolicy: IfNotPresent
   containerPort: 5000
   env: {}
   service:
     port: 80
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests:
-      cpu: 250m
-      memory: 256Mi
+  resources: {}
 
 ingress:
   enabled: true
@@ -45,6 +33,6 @@ ingress:
   ingressClassName: nginx
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    cert-manager.io/http01-edit-in-place: "true"
+    acme.cert-manager.io/http01-edit-in-place: "true"
   tls: true
   tlsSecret: dataiku-tls
