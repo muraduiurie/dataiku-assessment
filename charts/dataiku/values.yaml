@@ -1,0 +1,50 @@
+frontend:
+  replicas: 2
+  image:
+    repository: muraduiurie/dataiku-front
+    tag: latest
+    pullPolicy: IfNotPresent
+  containerPort: 80
+  env: {}
+  service:
+    port: 80
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+api:
+  replicas: 2
+  image:
+    repository: muraduiurie/dataiku-api
+    tag: latest
+    pullPolicy: IfNotPresent
+  containerPort: 5000
+  env: {}
+  service:
+    port: 80
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+ingress:
+  enabled: true
+  host: dataiku.promoldova.org
+  api:
+    path: /api
+  front:
+    path: /
+  pathType: Prefix
+  ingressClassName: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/http01-edit-in-place: "true"
+  tls: true
+  tlsSecret: dataiku-tls

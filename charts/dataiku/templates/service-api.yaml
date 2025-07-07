@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dataiku.name" . }}-api
+  labels:
+    app: {{ include "dataiku.name" . }}-api
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.api.service.port }}
+      targetPort: {{ .Values.api.containerPort }}
+      protocol: TCP
+      name: api
+  selector:
+    app: {{ include "dataiku.name" . }}-api

@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - app/**
 
 jobs:
   build-and-push:
@@ -26,7 +28,7 @@ jobs:
 
       - name: Build Front Docker image
         run: |
-          cd frontend
+          cd app/frontend
           docker build -t ${{ steps.meta_front.outputs.image }} .
 
       - name: Push Front Docker image
@@ -42,7 +44,7 @@ jobs:
 
       - name: Build API Docker image
         run: |
-          cd api
+          cd app/api
           docker build -t ${{ steps.meta_api.outputs.image }} .
 
       - name: Push API Docker image

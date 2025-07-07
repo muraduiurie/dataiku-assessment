@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dataiku.name" . }}-frontend
+  labels:
+    app: {{ include "dataiku.name" . }}-frontend
+    {{- include "dataiku.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.frontend.replicas }}
+  selector:
+    matchLabels:
+      app: {{ include "dataiku.name" . }}-frontend
+      {{- include "dataiku.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "dataiku.name" . }}-frontend
+        {{- include "dataiku.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: frontend
+          image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+          imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.frontend.containerPort }}
+          env:
+            {{- range $key, $value := .Values.frontend.env }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
+          resources:
+            {{- toYaml .Values.frontend.resources | nindent 12 }}
