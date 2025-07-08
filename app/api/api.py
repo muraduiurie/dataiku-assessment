@@ -10,11 +10,8 @@ from prometheus_client import start_http_server
 
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 
-# Set up Prometheus reader and HTTP server
-reader = PrometheusMetricReader()
-start_http_server(port=9000)  # Prometheus will scrape from here
-
 # OpenTelemetry setup
+reader = PrometheusMetricReader()
 resource = Resource(attributes={SERVICE_NAME: "flask-service"})
 provider = MeterProvider(metric_readers=[reader], resource=resource)
 set_meter_provider(provider)
@@ -74,3 +71,7 @@ def not_found(e):
 @app.route('/api/time')
 def get_current_time():
     return {'time': time.time()}
+
+if __name__ == "__main__":
+    start_http_server(port=9000)  # Prometheus scrape endpoint
+    app.run(host="0.0.0.0", port=5000)
