@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: kube-prometheus-stack-prometheus
+    release: kube-prometheus-stack
+  name: dataiku
+  namespace: kube-prometheus-stack
+spec:
+  endpoints:
+    - interval: 30s
+      path: /metrics
+      port: api
+  namespaceSelector:
+    matchNames:
+      - dataiku
+  selector:
+    matchLabels:
+      app: dataiku-api
