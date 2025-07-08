@@ -12,7 +12,7 @@ from opentelemetry.instrumentation.flask import FlaskInstrumentor
 
 # Set up Prometheus reader and HTTP server
 reader = PrometheusMetricReader()
-start_http_server(port=8000)  # Prometheus will scrape from here
+start_http_server(port=9000)  # Prometheus will scrape from here
 
 # OpenTelemetry setup
 resource = Resource(attributes={SERVICE_NAME: "flask-service"})
