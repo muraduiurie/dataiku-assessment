@@ -11,8 +11,5 @@ spec:
       targetPort: {{ .Values.api.containerPort }}
       protocol: TCP
       name: api
-    - port: {{ .Values.api.service.monitoringPort }}
-      protocol: TCP
-      name: metrics
   selector:
     app: {{ include "dataiku.name" . }}-api

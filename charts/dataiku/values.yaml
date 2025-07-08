@@ -20,7 +20,6 @@ api:
   env: {}
   service:
     port: 80
-    monitoringPort: 8000
   resources: {}
 
 ingress:
