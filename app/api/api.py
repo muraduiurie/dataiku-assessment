@@ -73,5 +73,5 @@ def get_current_time():
     return {'time': time.time()}
 
 if __name__ == "__main__":
-    start_http_server(port=9000)  # Prometheus scrape endpoint
+    start_http_server(port=9000, addr="0.0.0.0")  # Prometheus scrape endpoint
     app.run(host="0.0.0.0", port=5000)
