@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: git@github.com:muraduiurie/dataiku-assessment.git
     targetRevision: main
-    path: app/charts/dataiku
+    path: charts/dataiku
     helm:
       valueFiles:
         - values.yaml
