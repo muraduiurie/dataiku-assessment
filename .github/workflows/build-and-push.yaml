@@ -1,0 +1,51 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - app/**
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker registry
+        run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login ${{ secrets.REGISTRY_URL || 'docker.io' }} -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+
+      # FRONTEND IMAGE
+      - name: Set Front Docker image tag
+        id: meta_front
+        run: |
+          IMAGE_NAME=${{ secrets.REGISTRY_USERNAME }}/dataiku-front
+          TAG=${GITHUB_SHA::7}
+          echo "image=${IMAGE_NAME}:${TAG}" >> $GITHUB_OUTPUT
+
+      - name: Build Front Docker image
+        run: |
+          cd app/frontend
+          docker build -t ${{ steps.meta_front.outputs.image }} .
+
+      - name: Push Front Docker image
+        run: docker push ${{ steps.meta_front.outputs.image }}
+
+      # BACKEND/API IMAGE
+      - name: Set API Docker image tag
+        id: meta_api
+        run: |
+          IMAGE_NAME=${{ secrets.REGISTRY_USERNAME }}/dataiku-api
+          TAG=${GITHUB_SHA::7}
+          echo "image=${IMAGE_NAME}:${TAG}" >> $GITHUB_OUTPUT
+
+      - name: Build API Docker image
+        run: |
+          cd app/api
+          docker build -t ${{ steps.meta_api.outputs.image }} .
+
+      - name: Push API Docker image
+        run: docker push ${{ steps.meta_api.outputs.image }}
