@@ -1,15 +1,7 @@
-flask==2.0.3
-Werkzeug==2.0.3
-python-dotenv==0.17.1
-
-# OpenTelemetry core
-opentelemetry-api==1.25.0
-opentelemetry-sdk==1.25.0
-
-# Prometheus exporter (beta version)
-opentelemetry-exporter-prometheus==0.46b0
+flask==2.3.3
+opentelemetry-api==1.24.0
+opentelemetry-sdk==1.24.0
+opentelemetry-instrumentation==0.45b0
+opentelemetry-instrumentation-flask==0.45b0
+opentelemetry-exporter-prometheus==0.45b0
 prometheus-client==0.20.0
-
-# Flask instrumentation (beta version)
-opentelemetry-instrumentation==0.46b0
-opentelemetry-instrumentation-flask==0.46b0
