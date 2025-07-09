@@ -57,6 +57,13 @@ ingress.promoldova.org. IN A 157.245.20.223
 ![img_4.png](images/img_4.png)
 ## Security via TLS
 TLS certificates are managed automatically by Cert-Manager, integrating with Let's Encrypt. Cert-Manager ensures certificates are renewed automatically, maintaining a secure and encrypted communication channel between the clients and the application.
+
+The configuration for the creation and management of the certificate is indicated via ingress annotations:
+```yaml
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    acme.cert-manager.io/http01-edit-in-place: "true"
+```
 ![img_7.png](images/img_7.png)
 
 ## Monitoring and Observability
