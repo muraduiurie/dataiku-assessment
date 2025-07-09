@@ -49,9 +49,10 @@ ingress.promoldova.org. IN A 157.245.20.223
 ![img_4.png](images/img_4.png)
 ## TLS
 The application is secured with TLS using a certificate issued by Let's Encrypt. The certificate is automatically provisioned and renewed by cert-manager using a `ClusterIssuer` resource. The `ClusterIssuer` is configured to request certificates from Let's Encrypt for the application's domain, and cert-manager ensures the certificate is kept up to date and valid across the cluster.
+![img_7.png](images/img_7.png)
 
 ## Monitoring
 The application has a dedicated serviceMonitor resource that is used to monitor the application. The serviceMonitor is configured to scrape the metrics from the application and send them to Prometheus for monitoring.
-![img_7.png](images/img_7.png)
+
 The serviceMonitor definition can be found in the helm chart templates folder: `charts/dataiku/templates/service-monitor.yaml`. The serviceMonitor is configured to scrape the metrics from the application every 30 seconds and send them to Prometheus.
 ![img_5.png](images/img_5.png)
