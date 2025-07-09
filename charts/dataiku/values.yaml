@@ -2,7 +2,7 @@ frontend:
   replicas: 2
   image:
     repository: muraduiurie/dataiku-front
-    tag: 2186bbc
+    tag: 9b290a1
     pullPolicy: IfNotPresent
   containerPort: 80
   env: {}
@@ -14,7 +14,7 @@ api:
   replicas: 2
   image:
     repository: muraduiurie/dataiku-api
-    tag: 2186bbc
+    tag: 9b290a1
     pullPolicy: IfNotPresent
   containerPort: 5000
   env: {}
