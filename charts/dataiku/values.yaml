@@ -12,6 +12,11 @@ frontend:
 
 api:
   replicas: 2
+  autoscaling:
+    minReplicas: 2
+    maxReplicas: 10
+    cpuUtilization: 80
+    memoryUtilization: 80
   image:
     repository: muraduiurie/dataiku-api
     tag: 9b290a1

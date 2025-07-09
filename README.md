@@ -17,16 +17,16 @@ The application code structure is clearly organized into two directories:
 
 
 ## Build Automation
-Dockerfiles are provided for both the frontend and backend components, streamlining the containerization process. Continuous Integration and Continuous Delivery (CI/CD) processes are automated via GitHub Actions, triggered upon each commit to the main branch.
+Dockerfiles have been provided for both the frontend and backend components, streamlining the containerization process. Continuous Integration and Continuous Delivery (CI/CD) processes are automated via GitHub Actions, triggered upon each commit to the main branch.
 ![img_1.png](images/img_1.png)
-This automation pipeline, defined in `.github/workflows/build-and-push.yaml`, builds Docker images and pushes them to a container registry, facilitating consistent deployment.
+This automation pipeline, defined in `.github/workflows/build-and-push.yaml`, builds Docker images and pushes them to my container registry (`docker.io/muraduiurie`), facilitating consistent deployment.
 
 ## Deployment Strategy
-Deployment is achieved using Helm charts and automated through ArgoCD, enabling synchronized deployments to a personal Kubernetes cluster. ArgoCD ensures continuous synchronization, keeping the deployed application in its desired state.
+Deployment is achieved using Helm charts and automated through ArgoCD deplpyed on the Kubernetes cluster, enabling synchronized deployments. ArgoCD ensures continuous synchronization, keeping the deployed application in its desired state.
 
 ![img_3.png](images/img_3.png)
 
-The Helm chart, located in charts/dataiku, provisions the following Kubernetes resources:
+The created Helm chart, located in `charts/dataiku`, provisions the following Kubernetes resources:
 
 - **Frontend Deployment**: Two pods for frontend redundancy and load balancing.
 - **API Deployment**: Two pods for backend redundancy and load balancing.
@@ -34,10 +34,15 @@ The Helm chart, located in charts/dataiku, provisions the following Kubernetes r
 - **API Service**: Load balances traffic across backend pods.
 - **Ingress**: Configures external traffic routing to internal Kubernetes services.
 - **ServiceMonitor**: Integrates with Prometheus for detailed application metrics monitoring.
+- **Horizontal Pod Autoscaler (HPA)**: Automatically scales the number of pods based on CPU utilization, ensuring optimal resource usage.
 
 ## Kubernetes Cluster Infrastructure
-The application contains two pods per component (Api and Frontend) for high availability. The pods are deployed in a Kubernetes cluster, which is managed by ArgoCD. The application is exposed via a service and an ingress controller.
+The application contains two pods per component (Api and Frontend) to ensure high availability. The pods are deployed in a Kubernetes cluster, which is managed by ArgoCD. The application is exposed via a service and an ingress controller.
 
+### Autoscaling
+The application is configured to scale automatically based on CPU usage. The Horizontal Pod Autoscaler (HPA) is set to maintain a target CPU and memory utilization. This ensures that the application can handle varying loads efficiently, scaling up during peak times and down during low traffic periods.
+
+The HPA configuration is defined in the Helm chart (`charts/dataiku/templates/hpa.yaml`), which specifies the target CPU utilization and the minimum and maximum number of replicas for the backend deployment.
 ### Architecture Diagram
 ![img.png](images/img.png)
 
