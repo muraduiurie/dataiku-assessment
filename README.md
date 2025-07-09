@@ -72,6 +72,7 @@ The configuration for the creation and management of the certificate is indicate
 ![img_7.png](images/img_7.png)
 
 ## Monitoring and Observability
+Some code changes have been done to original project in order to expose the metrics for Prometheus. The Flask backend exposes a `/metrics` endpoint, which is scraped by Prometheus to collect application metrics.
 Application monitoring leverages Prometheus and Grafana for real-time observability. Prometheus scrapes metrics exposed by the application's ServiceMonitor resource every 30 seconds, ensuring frequent data updates. Grafana visualizes this data, presenting dashboards with metrics such as request counts, latencies, and performance trends.
 
 The ServiceMonitor definition is available in the Helm chart (`charts/dataiku/templates/service-monitor.yaml`), clearly defining the scraping intervals and endpoints.
