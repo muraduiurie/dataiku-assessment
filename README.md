@@ -1,36 +1,44 @@
 # DATAIKU ASSESSMENT
 
-## Overview
-Dataiku assessment application is composed of two main components:
-- **Frontend**: A React application that provides a user interface for the assessment.
-- **Backend**: A Flask application that serves the frontend and provides an API for determining the current time.
+## Project Overview
 
-The application code can be found inside the `app` folder which contains two subfolders:
-- `frontend`: Contains the React application code.
-- `api`: Contains the Flask application code.
+The Dataiku Assessment application consists of two primary components:
 
-## Build
-Each component has a dedicated Dockerfile for building the application images. The images are built using github actions once a change is made to the codebase.
+**Frontend**: Built using React, providing users with an intuitive and responsive interface for interaction.
 
+**Backend**: Developed using Flask, providing RESTful API services, including a service for fetching the current server time.
+
+The application code structure is clearly organized into two directories:
+
+`app/frontend`: Contains the source code of the React application.
+
+`app/api`: Contains the source code of the Flask backend application.
+
+
+
+## Build Automation
+Dockerfiles are provided for both the frontend and backend components, streamlining the containerization process. Continuous Integration and Continuous Delivery (CI/CD) processes are automated via GitHub Actions, triggered upon each commit to the main branch.
 ![img_1.png](images/img_1.png)
-The GitHub actions pipeline can be found in the `.github/workflows/build-and-push.yaml` file. The pipeline is triggered on every push to the `main` branch and builds the Docker images for both components.
-## Deploy
-The application contains a Helm charts which is used to deploy the application. The Helm chart is being automatically deployed and updated by the ArgoCD pipeline.
+This automation pipeline, defined in `.github/workflows/build-and-push.yaml`, builds Docker images and pushes them to a container registry, facilitating consistent deployment.
+
+## Deployment Strategy
+Deployment is achieved using Helm charts and automated through ArgoCD, enabling synchronized deployments to a personal Kubernetes cluster. ArgoCD ensures continuous synchronization, keeping the deployed application in its desired state.
 
 ![img_3.png](images/img_3.png)
 
-The Helm chart can be found in the `charts/dataiku` folder. The chart contains the following resources:
-- **Frontend Deployment**: Deploys the pods for both frontend components.
-- **Api Deployment**: Deploys the pods for both API components.
-- **Front Service**: Exposes the Fronend application pods to the network.
-- **Api Service**: Exposes the API pods to the network.
-- **Ingress**: Configures the ingress controller to route the traffic to the application.
-- **ServiceMonitor**: Configures Prometheus to monitor the application and collect metrics.
+The Helm chart, located in charts/dataiku, provisions the following Kubernetes resources:
 
-## Application architecture
+- **Frontend Deployment**: Two pods for frontend redundancy and load balancing.
+- **API Deployment**: Two pods for backend redundancy and load balancing.
+- **Frontend Service**: Load balances traffic across frontend pods.
+- **API Service**: Load balances traffic across backend pods.
+- **Ingress**: Configures external traffic routing to internal Kubernetes services.
+- **ServiceMonitor**: Integrates with Prometheus for detailed application metrics monitoring.
+
+## Kubernetes Cluster Infrastructure
 The application contains two pods per component (Api and Frontend) for high availability. The pods are deployed in a Kubernetes cluster, which is managed by ArgoCD. The application is exposed via a service and an ingress controller.
 
-### Diagram
+### Architecture Diagram
 ![img.png](images/img.png)
 
 In order to be able to fully utilize the application, the following components are necessary in the Kubernetes cluster:
@@ -40,19 +48,19 @@ In order to be able to fully utilize the application, the following components a
 - **Grafana**: Visualizes the metrics collected by Prometheus and provides a dashboard for monitoring the application.
 - **ArgoCD**: Manages the deployment of the application and ensures that the application is always in the desired state.
 
-## DNS
-The application can be accessed via the following DNS: [dataiku.promoldova.org](https://dataiku.promoldova.org). The DNS is managed by the Kubernetes ingress controller, which routes the traffic to the appropriate service based on the hostname. The domain registrar is **IONOS**.
+## DNS Configuration
+DNS management is configured using the domain registrar IONOS. The application domain, dataiku.promoldova.org, uses a CNAME record pointing to an ingress controller's endpoint, which routes the traffic internally within the Kubernetes cluster.
 ```
 dataiku.promoldova.org. IN CNAME ingress.promoldova.org.
 ingress.promoldova.org. IN A 157.245.20.223
 ```
 ![img_4.png](images/img_4.png)
-## TLS
-The application is secured with TLS using a certificate issued by Let's Encrypt. The certificate is automatically provisioned and renewed by cert-manager using a `ClusterIssuer` resource. The `ClusterIssuer` is configured to request certificates from Let's Encrypt for the application's domain, and cert-manager ensures the certificate is kept up to date and valid across the cluster.
+## Security via TLS
+TLS certificates are managed automatically by Cert-Manager, integrating with Let's Encrypt. Cert-Manager ensures certificates are renewed automatically, maintaining a secure and encrypted communication channel between the clients and the application.
 ![img_7.png](images/img_7.png)
 
-## Monitoring
-The application has a dedicated serviceMonitor resource that is used to monitor the application. The serviceMonitor is configured to scrape the metrics from the application and send them to Prometheus for monitoring.
+## Monitoring and Observability
+Application monitoring leverages Prometheus and Grafana for real-time observability. Prometheus scrapes metrics exposed by the application's ServiceMonitor resource every 30 seconds, ensuring frequent data updates. Grafana visualizes this data, presenting dashboards with metrics such as request counts, latencies, and performance trends.
 
-The serviceMonitor definition can be found in the helm chart templates folder: `charts/dataiku/templates/service-monitor.yaml`. The serviceMonitor is configured to scrape the metrics from the application every 30 seconds and send them to Prometheus.
+The ServiceMonitor definition is available in the Helm chart (`charts/dataiku/templates/service-monitor.yaml`), clearly defining the scraping intervals and endpoints.
 ![img_5.png](images/img_5.png)
